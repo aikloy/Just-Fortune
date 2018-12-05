@@ -1,11 +1,18 @@
+import SvgUri from 'react-native-svg-uri';
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, View, Image } from 'react-native';
+import logo from './img/logo.svg'
+
 
 export default class App extends React.Component {
   render() {
     return (
       <View style={styles.container}>
-        <Text>Open up App.js to start working on your app!</Text>
+        <SvgUri
+          width="114"
+          height="131"
+          source={logo}
+        />
       </View>
     );
   }
@@ -14,7 +21,7 @@ export default class App extends React.Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: '#E6838E',
     alignItems: 'center',
     justifyContent: 'center',
   },
