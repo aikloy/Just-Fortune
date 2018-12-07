@@ -10,6 +10,7 @@
     "expo": "^31.0.2",
     "react": "16.5.0",
     "react-native": "https://github.com/expo/react-native/archive/sdk-31.0.0.tar.gz",
+    "react-native-segmented-control-tab": "^3.3.1",
     "react-native-svg": "^8.0.8",
     "react-native-svg-uri": "^1.2.3"
   },

@@ -3739,6 +3739,12 @@ react-native-screens@1.0.0-alpha.15:
   version "1.0.0-alpha.15"
   resolved "https://registry.yarnpkg.com/react-native-screens/-/react-native-screens-1.0.0-alpha.15.tgz#5b5a0041310b46f12048fda1908d52e7290ec18f"
 
+react-native-segmented-control-tab@^3.3.1:
+  version "3.3.1"
+  resolved "https://registry.yarnpkg.com/react-native-segmented-control-tab/-/react-native-segmented-control-tab-3.3.1.tgz#6fba6b2a48d4a0a3105f1b2225b5fd176e0dc88b"
+  dependencies:
+    prop-types "^15.5.10"
+
 react-native-svg-uri@^1.2.3:
   version "1.2.3"
   resolved "https://registry.yarnpkg.com/react-native-svg-uri/-/react-native-svg-uri-1.2.3.tgz#2f67f30564068a0fee68a751845332a5185a1aab"
