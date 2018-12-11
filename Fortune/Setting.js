@@ -1,7 +1,12 @@
+import SvgUri from 'react-native-svg-uri';
 import React, { Component } from 'react';
 import SegmentedControlTab from 'react-native-segmented-control-tab';
-import { StyleSheet, Text, View, TextInput, Button, TouchableWithoutFeedback, Keyboard, SegmentedControlIOS, Picker, TouchableOpacity } from 'react-native';
+import { StyleSheet, Text, View, TextInput, TouchableOpacity, TouchableWithoutFeedback, Keyboard, SegmentedControlIOS, Picker, TouchableHighlight  } from 'react-native';
 import { LinearGradient } from 'expo';
+import male_normal from '../img/male_normal.svg';
+import male_active from '../img/male_active.svg';
+import female_normal from '../img/female_normal.svg';
+import female_active from '../img/female_active.svg';
 
 const timeData = [
     {
@@ -48,16 +53,26 @@ const timeData = [
 
 export default class Setting extends Component {
     state = {
-        gender: 'm',
-        birth: '',
-        solarCal: 'solar',
-        time: '',
-        selectedIndex: 0
+        gender: this.props.userInfo.gender,
+        birth: this.props.userInfo.birth,
+        solarCal: this.props.userInfo.solarCal,
+        time: this.props.userInfo.time,
+        selectedIndex: this.props.userInfo.selectedIndex
     }
-    saveInfo = () => {
-        this.props.saveInfo(this.state)
+    componentWillReceiveProps=(nextProps)=>{
+        if(nextProps.userInfo !== this.state){
+            this.setState(nextProps.userInfo)
+        }
+    }
+    
+    selectGender = (gender) => {
+        console.log(gender)
+        this.setState({
+            gender: gender
+        })
     }
     render(){
+        console.log(this.props.userInfo)
         const timeList = timeData.map((data, i)=> {
             return(
                 <Picker.Item key={i} label={data.text} value={data.value} color='white' />
@@ -65,104 +80,131 @@ export default class Setting extends Component {
         })
         return(
             <View style={styles.container}>
-                <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
-                <View style={styles.form}>
-                    <View style={styles.gender}></View>
-                    <View style={styles.birth}>
-                        <Text style={styles.text}>생년월일  </Text>
-                        <TextInput 
-                            onChangeText={(birth) => this.setState({birth})}
-                            value={this.state.birth}
-                            keyboardType={'number-pad'}
-                            style= {{width:'70%', borderBottomColor:'rgba(255,255,255,0.5)', borderBottomWidth: 1, textAlign:'center', color:'#fff'}}
-                            placeholder = '예) 19001101'
-                            maxLength = {8}
-                            onSubmitEditing={Keyboard.dismiss}
-                        />
-                    </View>
-                    <View style={styles.line}>
+                <TouchableWithoutFeedback style={{borderWidth:1, borderColor:'blue'}} onPress={Keyboard.dismiss}>
+                    <View style={styles.form}>
+                        <View style={styles.gender}>
+                            <TouchableOpacity style={styles.img} onPress={()=>this.selectGender('m')}>
+                            <SvgUri
+                                width="70"
+                                height="70"
+                                source={this.state.gender === 'm' ? male_active : male_normal}
+                            />
+                            </TouchableOpacity>
+                            <TouchableOpacity style={styles.img} onPress={()=>this.selectGender('f')}>
+                            <SvgUri
+                                width="70"
+                                height="70"
+                                source={this.state.gender === 'f' ? female_active : female_normal}
+                            />
+                            </TouchableOpacity>
+                        </View>
+                        <View style={styles.birth}>
+                            <Text style={styles.text}>생년월일  </Text>
+                            <TextInput 
+                                onChangeText={(birth) => this.setState({birth})}
+                                value={this.state.birth}
+                                keyboardType={'number-pad'}
+                                style= {{width:'70%', borderBottomColor:'rgba(255,255,255,0.5)', borderBottomWidth: 1, textAlign:'center', color:'#fff'}}
+                                placeholder = '예) 19001101'
+                                maxLength = {8}
+                                onSubmitEditing={Keyboard.dismiss}
+                            />
+                        </View>
                         <SegmentedControlIOS
                             values={['양력', '음력', '윤달']}
                             selectedIndex={this.state.selectedIndex}
-                            onChange={(index) => {
-                                var solarCal = ['Solar', 'lunarGeneral', 'lunarLeap']
-                                console.log(index)
-                                this.setState({selectedIndex: index, solarCal: solarCal[index]});
-                            }}
+                            onChange={this.changeSolar}
                             tintColor='#fff'
                         />
-                    </View>
-                    <View style={styles.time}>
                         <Picker
                             selectedValue={this.state.time}
                             style={styles.picker}
                             onValueChange={(itemValue) => this.setState({time: itemValue})}
-                            itemStyle={{color:'#fff'}}
+                            // itemStyle={{color:'#fff'}}
+                            textStyle={{fontSize:8}} 
                         >
                         {timeList}
                         </Picker>
                     </View>
-                </View>
                 </TouchableWithoutFeedback>
-                <View style={styles.buttonWrap}>
-                    <TouchableOpacity onPress={this.saveInfo}>
-                        <Text style={styles.button}>저장</Text>
-                    </TouchableOpacity>
-                </View>
+                <TouchableWithoutFeedback style={{borderWidth:1, borderColor:'red'}} onPress={this.saveInfo}>
+                    <View style={styles.button}>
+                        <Text style={styles.buttonText}>저장</Text>
+                    </View>
+                </TouchableWithoutFeedback>
             </View>
         )
     }
+
+    
+    changeSolar = (e) => {
+        Keyboard.dismiss()
+        const index = e.nativeEvent.selectedSegmentIndex
+        console.log(index)
+        var solarCal = ['Solar', 'lunarGeneral', 'lunarLeap']
+        this.setState({selectedIndex: index, solarCal: solarCal[index]});
+    }
+
+    saveInfo = () => {
+        console.log(this.state)
+        this.props.saveInfo(this.state)
+    }
 }
+
 
 const styles = StyleSheet.create({
     container: {
-        flex: 1,
         alignItems: 'center',
-        justifyContent: 'center',
+        paddingTop: 0,
     },
     form: {
         flex: 3,
         // alignItems: 'center',
         justifyContent: 'center',
-        width: '70%'
+        width: 200,
     },
-    buttonWrap: {
-        flex: 1
+    buttonText: {
+        padding: 20,
+        color: '#ea838d'
     },
     button: {
-        borderColor: '#fff',
-        borderWidth: 1,
-        width: 100,
-        textAlign: 'center',
-        height: 30,
-        lineHeight: 35,
-        color: '#fff'
+        marginBottom: 30,
+        width: 260,
+        alignItems: 'center',
+        backgroundColor: '#ffffff'
     },
     line: {
     },
     birth: {
         flexDirection: 'row',
         alignItems: 'center',
-        marginBottom: 15
+        marginBottom: 15,
+        width: 200
     },
     gender: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'space-around', 
+        paddingBottom: 20,  
     },
     time: {
-        alignItems: 'center',
-        justifyContent: 'center',
-        position: 'relative',
+        // alignItems: 'center',
+        // justifyContent: 'center',
+        // position: 'relative',
     },
     text: {
         color: '#fff',
         flex: 1
     },
     picker: {
-        position: 'absolute',
-        top: 0,
-        left: 0,
-        right: 0,
+        // position: 'absolute',
+        // top: 0,
+        // left: 0,
+        // right: 0,
         backgroundColor: '#ea838d',
-        // height: '20%'
+        height: '20%',
+        width: 300,
+        marginLeft: -50
     }
 
 })
