@@ -89,14 +89,14 @@ export default class Setting extends Component {
                             <SvgUri
                                 width="70"
                                 height="70"
-                                source={this.state.gender === 'm' ? male_active : male_normal}
+                                svgXmlData={this.state.gender === 'm' ? male_active : male_normal}
                             />
                             </TouchableOpacity>
                             <TouchableOpacity style={styles.img} onPress={()=>this.selectGender('f')}>
                             <SvgUri
                                 width="70"
                                 height="70"
-                                source={this.state.gender === 'f' ? female_active : female_normal}
+                                svgXmlData={this.state.gender === 'f' ? female_active : female_normal}
                             />
                             </TouchableOpacity>
                         </View>

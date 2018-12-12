@@ -65,18 +65,18 @@ export default class Saju extends Component {
                         <View style={styles.txtWrap}>
                             {arr.length > 0 ?
                                 <View style={styles.title}>
-                                <Text style={{color:'#fff',fontSize:13}}>{arr[0]}</Text>
-                                <Text style={{color:'#fff',fontSize:16, fontWeight:'bold'}}>{arr[1]}</Text>
-                                <Text style={{color:'#fff',fontSize:13}}>{arr[2]}</Text>
+                                <Text style={{color:'#fff',fontSize:11}}>{arr[0]}</Text>
+                                <Text style={{color:'#fff',fontSize:13, fontWeight:'bold'}}>{arr[1]}</Text>
+                                <Text style={{color:'#fff',fontSize:11}}>{arr[2]}</Text>
                                 </View>:null
                             }
-                            <Text style={{color:'#fff',lineHeight:20}}>{desc}</Text>
+                            <Text style={{color:'#fff',lineHeight:20,fontSize:9}}>{desc}</Text>
                         </View>
                         <View style={styles.imgWrap}>
                             <SvgUri
                                 width="60"
                                 height="60"
-                                source={img}
+                                svgXmlData={img}
                             />
                             <Text style={styles.name}>{name}</Text>
                         </View>
@@ -90,19 +90,19 @@ export default class Saju extends Component {
                             <SvgUri
                                 width="60"
                                 height="60"
-                                source={img}
+                                svgXmlData={img}
                             />
                             <Text style={styles.name}>{name}</Text>
                         </View>
                         <View style={styles.txtWrap}>
                             {arr.length > 0 ?
                                 <View style={styles.title}>
-                                <Text style={{color:'#fff',fontSize:13}}>{arr[0]}</Text>
-                                <Text style={{color:'#fff',fontSize:16, fontWeight:'bold'}}>{arr[1]}</Text>
-                                <Text style={{color:'#fff',fontSize:13}}>{arr[2]}</Text>
+                                <Text style={{color:'#fff',fontSize:11}}>{arr[0]}</Text>
+                                <Text style={{color:'#fff',fontSize:13, fontWeight:'bold'}}>{arr[1]}</Text>
+                                <Text style={{color:'#fff',fontSize:11}}>{arr[2]}</Text>
                                 </View>:null
                             }
-                            <Text style={{color:'#fff',lineHeight:20}}>{desc}</Text>
+                            <Text style={{color:'#fff',lineHeight:20,fontSize:9}}>{desc}</Text>
                         </View>
                         {readMoreBlock !== i ? <Text style={styles.moreButton}>Read More!</Text> : null}
                     </TouchableOpacity>
@@ -147,18 +147,18 @@ export default class Saju extends Component {
                         <View style={styles.txtWrap}>
                             {arr.length > 0 ?
                                 <View style={styles.title}>
-                                <Text style={{color:'#fff',fontSize:13}}>{arr[0]}</Text>
-                                <Text style={{color:'#fff',fontSize:16, fontWeight:'bold'}}>{arr[1]}</Text>
-                                <Text style={{color:'#fff',fontSize:13}}>{arr[2]}</Text>
+                                <Text style={{color:'#fff',fontSize:11}}>{arr[0]}</Text>
+                                <Text style={{color:'#fff',fontSize:13, fontWeight:'bold'}}>{arr[1]}</Text>
+                                <Text style={{color:'#fff',fontSize:11}}>{arr[2]}</Text>
                                 </View>:null
                             }
-                            <Text style={{color:'#fff',lineHeight:20}}>{desc}</Text>
+                            <Text style={{color:'#fff',lineHeight:20,fontSize:9}}>{desc}</Text>
                         </View>
                         <View style={styles.imgWrap}>
                             <SvgUri
                                 width="60"
                                 height="60"
-                                source={img}
+                                svgXmlData={img}
                             />
                             <Text style={styles.name}>{name}</Text>
                         </View>
@@ -172,19 +172,19 @@ export default class Saju extends Component {
                             <SvgUri
                                 width="60"
                                 height="60"
-                                source={img}
+                                svgXmlData={img}
                             />
                             <Text style={styles.name}>{name}</Text>
                         </View>
                         <View style={styles.txtWrap}>
                             {arr.length > 0 ?
                                 <View style={styles.title}>
-                                <Text style={{color:'#fff',fontSize:13}}>{arr[0]}</Text>
-                                <Text style={{color:'#fff',fontSize:16, fontWeight:'bold'}}>{arr[1]}</Text>
-                                <Text style={{color:'#fff',fontSize:13}}>{arr[2]}</Text>
+                                <Text style={{color:'#fff',fontSize:11}}>{arr[0]}</Text>
+                                <Text style={{color:'#fff',fontSize:13, fontWeight:'bold'}}>{arr[1]}</Text>
+                                <Text style={{color:'#fff',fontSize:11}}>{arr[2]}</Text>
                                 </View>:null
                             }
-                            <Text style={{color:'#fff',lineHeight:20}}>{desc}</Text>
+                            <Text style={{color:'#fff',lineHeight:20,fontSize:9}}>{desc}</Text>
                         </View>
                         {readMoreBlock !== i ? <Text style={styles.moreButton}>Read More!</Text> : null}
                     </TouchableOpacity>
@@ -219,12 +219,12 @@ export default class Saju extends Component {
                     <SvgUri
                         width="60"
                         height="60"
-                        source={img}
+                        svgXmlData={img}
                     />
                     <Text style={styles.name}>{name}</Text>
                     </View>
                     <View style={styles.txtWrap}>
-                    <Text style={{color:'#fff',lineHeight:20}}>{desc}</Text>
+                    <Text style={{color:'#fff',lineHeight:20,fontSize:9}}>{desc}</Text>
                     </View>
                 </View>
             )
@@ -240,7 +240,7 @@ export default class Saju extends Component {
                     <SvgUri
                         width="20"
                         height="20"
-                        source={setting}
+                        svgXmlData={setting}
                     />
                     </View>
                     </TouchableOpacity>
@@ -382,7 +382,7 @@ const styles = StyleSheet.create({
         paddingBottom: 5,
         backgroundColor: '#fff',
         borderRadius: 5,
-        fontSize: 12,
+        fontSize: 10,
         overflow:'hidden',
         // borderWidth: 1,
         // borderColor: '#fff',

@@ -1,4 +1,4 @@
-import SvgUri from 'react-native-svg-uri';
+// import SvgUri from 'react-native-svg-uri';
 import logo from './assets/logo.svg';
 import aicloy from './assets/aicloy.svg';
 import male_normal from './assets/male_normal.svg';
@@ -71,31 +71,32 @@ export default class App extends Component {
       let unse1 = eval("("+unse+")")
       this.setState({
         fortuneData: unse1.result,
+        isLoaded: true
       })
     })
   }
 
-  async loadResources() {
-    const images = [
-      logo,
-      love,
-      money,
-      study,
-      total,
-      work,
-      setting,
-      male_normal,
-      male_active,
-      female_normal,
-      female_active,
-    ];
+  // async loadResources() {
+  //   const images = [
+  //     logo,
+  //     love,
+  //     money,
+  //     study,
+  //     total,
+  //     work,
+  //     setting,
+  //     male_normal,
+  //     male_active,
+  //     female_normal,
+  //     female_active,
+  //   ];
 
-    const cacheImages = images.map((image) => {
-      return Asset.fromModule(image).downloadAsync();
-    });
-    return Promise.all(cacheImages)
-
-  }
+  //   const cacheImages = images.map((image) => {
+  //     console.log('cached')
+  //     return Asset.fromModule(image).downloadAsync();
+  //   });
+  //   return Promise.all(cacheImages)
+  // }
 
   saveInfo = (data)=>{
     const stringData = JSON.stringify(data)
@@ -132,8 +133,8 @@ export default class App extends Component {
     }else{
       return (
         <AppLoading
-          startAsync={this.loadResources}
-          onFinish={() => this.setState({isLoaded: true})}
+          // startAsync={this.loadResources}
+          // onFinish={() => this.setState({isLoaded: true})}
           onError={console.warn}
         />
         // <View style={styles.wrap}>
