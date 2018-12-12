@@ -3,10 +3,10 @@ import React, { Component } from 'react';
 import SegmentedControlTab from 'react-native-segmented-control-tab';
 import { StyleSheet, Text, View, TextInput, TouchableOpacity, TouchableWithoutFeedback, Keyboard, SegmentedControlIOS, Picker, TouchableHighlight  } from 'react-native';
 import { LinearGradient } from 'expo';
-import male_normal from '../img/male_normal.svg';
-import male_active from '../img/male_active.svg';
-import female_normal from '../img/female_normal.svg';
-import female_active from '../img/female_active.svg';
+// import male_normal from '../img/male_normal.svg';
+// import male_active from '../img/male_active.svg';
+// import female_normal from '../img/female_normal.svg';
+// import female_active from '../img/female_active.svg';
 
 const timeData = [
     {
@@ -66,16 +66,18 @@ export default class Setting extends Component {
     }
     
     selectGender = (gender) => {
-        console.log(gender)
+        // console.log(gender)
+        Keyboard.dismiss()
         this.setState({
             gender: gender
         })
     }
     render(){
+        const { female_active, female_normal, male_active, male_normal } = this.props;
         console.log(this.props.userInfo)
         const timeList = timeData.map((data, i)=> {
             return(
-                <Picker.Item key={i} label={data.text} value={data.value} color='white' />
+                <Picker.Item key={i} label={data.text} value={data.value} color='#ea838d' />
             )
         })
         return(
@@ -108,23 +110,34 @@ export default class Setting extends Component {
                                 placeholder = '예) 19001101'
                                 maxLength = {8}
                                 onSubmitEditing={Keyboard.dismiss}
+                                underlineColorAndroid={"transparent"}
                             />
                         </View>
-                        <SegmentedControlIOS
+                        <SegmentedControlTab
                             values={['양력', '음력', '윤달']}
                             selectedIndex={this.state.selectedIndex}
-                            onChange={this.changeSolar}
-                            tintColor='#fff'
+                            onTabPress={this.changeSolar}
+                            tabTextStyle={{color:'#fff'}}
+                            tabStyle={{backgroundColor:'#ea838d',borderColor:'#fff'}}
+                            activeTabStyle={{backgroundColor:'#fff'}}
+                            activeTabTextStyle={{color:'#ea838d'}}
                         />
-                        <Picker
-                            selectedValue={this.state.time}
-                            style={styles.picker}
-                            onValueChange={(itemValue) => this.setState({time: itemValue})}
-                            // itemStyle={{color:'#fff'}}
-                            textStyle={{fontSize:8}} 
-                        >
-                        {timeList}
-                        </Picker>
+                        <View style={styles.birth}>
+                            <Text style={styles.text}>생시  </Text>
+                            <View style={{width:'70%', height:"20%", textAlign:'center'}}>
+                            <Picker
+                                selectedValue={this.state.time}
+                                style={styles.picker}
+                                onValueChange={(itemValue) => this.setState({time: itemValue})}
+                                // itemStyle={{color:'#ea838d'}}
+                                // textStyle={{fontSize:8}} 
+                                // mode={"dropdown"}
+                            >
+                            {timeList}
+                            </Picker>
+                            </View>
+                        </View>
+                        
                     </View>
                 </TouchableWithoutFeedback>
                 <TouchableWithoutFeedback style={{borderWidth:1, borderColor:'red'}} onPress={this.saveInfo}>
@@ -137,10 +150,10 @@ export default class Setting extends Component {
     }
 
     
-    changeSolar = (e) => {
+    changeSolar = (index) => {
         Keyboard.dismiss()
-        const index = e.nativeEvent.selectedSegmentIndex
-        console.log(index)
+        // const index = e.nativeEvent.selectedSegmentIndex
+        // console.log(index)
         var solarCal = ['Solar', 'lunarGeneral', 'lunarLeap']
         this.setState({selectedIndex: index, solarCal: solarCal[index]});
     }
@@ -201,10 +214,10 @@ const styles = StyleSheet.create({
         // top: 0,
         // left: 0,
         // right: 0,
-        backgroundColor: '#ea838d',
-        height: '20%',
-        width: 300,
-        marginLeft: -50
+        backgroundColor: '#fff',
+        height: '100%',
+        // borderColor: "#fff",
+        // borderBottomWidth: 1,
     }
 
 })

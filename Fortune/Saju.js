@@ -1,12 +1,13 @@
 import SvgUri from 'react-native-svg-uri';
 import React, { Component } from 'react';
+import SegmentedControlTab from 'react-native-segmented-control-tab';
 import { StyleSheet, Text, TouchableOpacity, View, SegmentedControlIOS, ScrollView, WebView } from 'react-native';
-import love from '../img/love.svg';
-import money from '../img/money.svg';
-import study from '../img/study.svg';
-import total from '../img/total.svg';
-import work from '../img/work.svg';
-import setting from '../img/setting.svg';
+// import love from '../img/love.svg';
+// import money from '../img/money.svg';
+// import study from '../img/study.svg';
+// import total from '../img/total.svg';
+// import work from '../img/work.svg';
+// import setting from '../img/setting.svg';
 
 export default class Saju extends Component {
     state = {
@@ -20,6 +21,7 @@ export default class Saju extends Component {
         })
     }
     render(){
+        const { love, money, study, total, work, setting } = this.props;
         const data = this.props.fortuneData;
         if(data !== undefined){
         const day = data.day
@@ -63,12 +65,12 @@ export default class Saju extends Component {
                         <View style={styles.txtWrap}>
                             {arr.length > 0 ?
                                 <View style={styles.title}>
-                                <Text>{arr[0]}</Text>
-                                <Text style={{fontWeight:'bold'}}>{arr[1]}</Text>
-                                <Text>{arr[2]}</Text>
+                                <Text style={{color:'#fff',fontSize:13}}>{arr[0]}</Text>
+                                <Text style={{color:'#fff',fontSize:16, fontWeight:'bold'}}>{arr[1]}</Text>
+                                <Text style={{color:'#fff',fontSize:13}}>{arr[2]}</Text>
                                 </View>:null
                             }
-                            <Text>{desc}</Text>
+                            <Text style={{color:'#fff',lineHeight:20}}>{desc}</Text>
                         </View>
                         <View style={styles.imgWrap}>
                             <SvgUri
@@ -95,12 +97,12 @@ export default class Saju extends Component {
                         <View style={styles.txtWrap}>
                             {arr.length > 0 ?
                                 <View style={styles.title}>
-                                <Text>{arr[0]}</Text>
-                                <Text style={{fontWeight:'bold'}}>{arr[1]}</Text>
-                                <Text>{arr[2]}</Text>
+                                <Text style={{color:'#fff',fontSize:13}}>{arr[0]}</Text>
+                                <Text style={{color:'#fff',fontSize:16, fontWeight:'bold'}}>{arr[1]}</Text>
+                                <Text style={{color:'#fff',fontSize:13}}>{arr[2]}</Text>
                                 </View>:null
                             }
-                            <Text>{desc}</Text>
+                            <Text style={{color:'#fff',lineHeight:20}}>{desc}</Text>
                         </View>
                         {readMoreBlock !== i ? <Text style={styles.moreButton}>Read More!</Text> : null}
                     </TouchableOpacity>
@@ -145,12 +147,12 @@ export default class Saju extends Component {
                         <View style={styles.txtWrap}>
                             {arr.length > 0 ?
                                 <View style={styles.title}>
-                                <Text>{arr[0]}</Text>
-                                <Text style={{fontWeight:'bold'}}>{arr[1]}</Text>
-                                <Text>{arr[2]}</Text>
+                                <Text style={{color:'#fff',fontSize:13}}>{arr[0]}</Text>
+                                <Text style={{color:'#fff',fontSize:16, fontWeight:'bold'}}>{arr[1]}</Text>
+                                <Text style={{color:'#fff',fontSize:13}}>{arr[2]}</Text>
                                 </View>:null
                             }
-                            <Text>{desc}</Text>
+                            <Text style={{color:'#fff',lineHeight:20}}>{desc}</Text>
                         </View>
                         <View style={styles.imgWrap}>
                             <SvgUri
@@ -177,12 +179,12 @@ export default class Saju extends Component {
                         <View style={styles.txtWrap}>
                             {arr.length > 0 ?
                                 <View style={styles.title}>
-                                <Text>{arr[0]}</Text>
-                                <Text style={{fontWeight:'bold'}}>{arr[1]}</Text>
-                                <Text>{arr[2]}</Text>
+                                <Text style={{color:'#fff',fontSize:13}}>{arr[0]}</Text>
+                                <Text style={{color:'#fff',fontSize:16, fontWeight:'bold'}}>{arr[1]}</Text>
+                                <Text style={{color:'#fff',fontSize:13}}>{arr[2]}</Text>
                                 </View>:null
                             }
-                            <Text>{desc}</Text>
+                            <Text style={{color:'#fff',lineHeight:20}}>{desc}</Text>
                         </View>
                         {readMoreBlock !== i ? <Text style={styles.moreButton}>Read More!</Text> : null}
                     </TouchableOpacity>
@@ -222,7 +224,7 @@ export default class Saju extends Component {
                     <Text style={styles.name}>{name}</Text>
                     </View>
                     <View style={styles.txtWrap}>
-                    <Text>{desc}</Text>
+                    <Text style={{color:'#fff',lineHeight:20}}>{desc}</Text>
                     </View>
                 </View>
             )
@@ -243,11 +245,14 @@ export default class Saju extends Component {
                     </View>
                     </TouchableOpacity>
                     </View>
-                <SegmentedControlIOS
+                <SegmentedControlTab
                     values={['오늘의운세', '내일의운세', '이달의운세']}
                     selectedIndex={selectedIndex}
-                    onChange={this.changeView}
-                    tintColor='#fff'
+                    onTabPress={this.changeView}
+                    tabTextStyle={{color:'#fff'}}
+                    tabStyle={{backgroundColor:'#ea838d',borderColor:'#fff'}}
+                    activeTabStyle={{backgroundColor:'#fff'}}
+                    activeTabTextStyle={{color:'#ea838d'}}
                 />
                 {selectedIndex === 0 ? 
                 <ScrollView style={styles.scrollBox}>
@@ -265,8 +270,8 @@ export default class Saju extends Component {
         }
     }
 
-    changeView = (e) => {
-        const index = e.nativeEvent.selectedSegmentIndex
+    changeView = (index) => {
+        // const index = e.nativeEvent.selectedSegmentIndex
         console.log(index)
         this.setState({selectedIndex: index});
     }
@@ -306,7 +311,10 @@ const styles = StyleSheet.create({
         paddingLeft: 10,
         paddingRight: 10,
         paddingBottom: 10,
-        width: '75%' 
+        paddingTop: 10,
+        width: '75%' ,
+        height:'100%',
+        overflow:'hidden',
     },
     userInfo: {
         color: '#fff',
@@ -314,35 +322,37 @@ const styles = StyleSheet.create({
     },
     title: {
         flexDirection: 'row',
-        // alignItems: 'center',
+        alignItems: 'center',
         justifyContent: 'center',   
         paddingLeft: 10,
         paddingRight: 10,
         paddingBottom: 10,
-        marginTop: -15
+        marginTop: -10,
     },
     fortuneBlock: {
         flex:1,
         paddingTop: 10,
         paddingLeft: 10,
         paddingRight: 10,
-        paddingBottom: 10,
+        paddingBottom: 30,
         borderColor: '#fff',
         borderBottomWidth: 1,
         marginBottom: 10,
         flexDirection: 'row',
         height: 100,
-        position: 'relative'
+        position: 'relative',
+        overflow:"hidden"
         // justifyContent: 'space-between',
     },
     fortuneBlockMore: {
         flex:1,
-        paddingTop: 10,
+        // paddingTop: 10,
         paddingLeft: 10,
         paddingRight: 10,
+        paddingBottom: 10,
         borderColor: '#fff',
         borderBottomWidth: 1,
-        marginBottom: 10,
+        marginBottom: 0,
         flexDirection: 'row',
     },
     moreButton: {

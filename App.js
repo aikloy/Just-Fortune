@@ -1,17 +1,27 @@
 import SvgUri from 'react-native-svg-uri';
+import logo from './assets/img/logo.svg';
+import aicloy from './assets/img/aicloy.svg';
+import male_normal from './assets/img/male_normal.svg';
+import male_active from './assets/img/male_active.svg';
+import female_normal from './assets/img/female_normal.svg';
+import female_active from './assets/img/female_active.svg';
+import love from './assets/img/love.svg';
+import money from './assets/img/money.svg';
+import study from './assets/img/study.svg';
+import total from './assets/img/total.svg';
+import work from './assets/img/work.svg';
+import setting from './assets/img/setting.svg';
 import React, { Component } from 'react';
 import { StyleSheet, Text, View, Image, AsyncStorage } from 'react-native';
-import logo from './img/logo.svg';
-import aicloy from './img/aicloy.svg';
+import { Asset, AppLoading } from 'expo';
 import { Saju, Setting } from './Fortune';
-
 
 export default class App extends Component {
   state = {
     isLoaded: false,
     isLogin: false,
     userInfo: '',
-    fortuneData: ''
+    fortuneData: undefined
   }
 
   componentDidMount =() => {
@@ -61,9 +71,30 @@ export default class App extends Component {
       let unse1 = eval("("+unse+")")
       this.setState({
         fortuneData: unse1.result,
-        isLoaded: true
       })
     })
+  }
+
+  async loadResources() {
+    const images = [
+      logo,
+      love,
+      money,
+      study,
+      total,
+      work,
+      setting,
+      male_normal,
+      male_active,
+      female_normal,
+      female_active,
+    ];
+
+    const cacheImages = images.map((image) => {
+      return Asset.fromModule(image).downloadAsync();
+    });
+    return Promise.all(cacheImages)
+
   }
 
   saveInfo = (data)=>{
@@ -74,57 +105,55 @@ export default class App extends Component {
 
   render() {
     const { isLoaded, isLogin, userInfo } = this.state;
-    if(isLogin){
+    if(isLoaded){
       return (
         <View style={styles.wrap}>
-          { isLoaded ? 
+          { isLogin ? 
           <Saju
            changeUserInfo={this.changeUserInfo}
            fortuneData={this.state.fortuneData}
+           love={love}
+           money={money}
+           study={study}
+           total={total}
+           work={work}
+           setting={setting}
           /> : 
-          <View style={styles.container}>
-            <View style={styles.logo}>
-              <SvgUri
-                width="114"
-                height="130"
-                source={logo}
-              />
-            </View>
-            <View style={styles.bottomlogo}>
-              <SvgUri
-                width="100"
-                height="26"
-                source={aicloy}
-              />
-            </View>
-          </View>}
+          <Setting
+            saveInfo={this.saveInfo}
+            userInfo={this.state.userInfo}
+            male_normal={male_normal}
+            male_active={male_active}
+            female_normal={female_normal}
+            female_active={female_active}
+          />}
         </View>
       );
     }else{
       return (
-        <View style={styles.wrap}>
-          { isLoaded ? 
-            <Setting
-            saveInfo={this.saveInfo}
-            userInfo={this.state.userInfo}
-          /> : 
-          <View style={styles.container}>
-            <View style={styles.logo}>
-              <SvgUri
-                width="114"
-                height="130"
-                source={logo}
-              />
-            </View>
-            <View style={styles.bottomlogo}>
-              <SvgUri
-                width="100"
-                height="26"
-                source={aicloy}
-              />
-            </View>
-          </View>}
-        </View>
+        <AppLoading
+          startAsync={this.loadResources}
+          onFinish={() => this.setState({isLoaded: true})}
+          onError={console.warn}
+        />
+        // <View style={styles.wrap}>
+        //   <View style={styles.container}>
+        //     <View style={styles.logo}>
+        //       <SvgUri
+        //         width="114"
+        //         height="130"
+        //         source={logo}
+        //       />
+        //     </View>
+        //     <View style={styles.bottomlogo}>
+        //       <SvgUri
+        //         width="100"
+        //         height="26"
+        //         source={aicloy}
+        //       />
+        //     </View>
+        //   </View>
+        // </View>
       );
     }
   }
