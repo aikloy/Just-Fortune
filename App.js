@@ -11,8 +11,11 @@ import study from './assets/study.svg';
 import total from './assets/total.svg';
 import work from './assets/work.svg';
 import setting from './assets/setting.svg';
+import button_save from './assets/button_save.png';
+import logo_width from './assets/logo_width.png';
+import background from './assets/background.png';
 import React, { Component } from 'react';
-import { StyleSheet, Text, View, Image, AsyncStorage } from 'react-native';
+import { StyleSheet, ImageBackground , AsyncStorage } from 'react-native';
 import { Asset, AppLoading } from 'expo';
 import { Saju, Setting } from './Fortune';
 
@@ -71,32 +74,35 @@ export default class App extends Component {
       let unse1 = eval("("+unse+")")
       this.setState({
         fortuneData: unse1.result,
-        isLoaded: true
+        // isLoaded: true
       })
     })
   }
 
-  // async loadResources() {
-  //   const images = [
-  //     logo,
-  //     love,
-  //     money,
-  //     study,
-  //     total,
-  //     work,
-  //     setting,
-  //     male_normal,
-  //     male_active,
-  //     female_normal,
-  //     female_active,
-  //   ];
+  async loadResources() {
+    const images = [
+      background,
+      logo_width,
+      button_save
+      // logo,
+      // love,
+      // money,
+      // study,
+      // total,
+      // work,
+      // setting,
+      // male_normal,
+      // male_active,
+      // female_normal,
+      // female_active,
+    ];
 
-  //   const cacheImages = images.map((image) => {
-  //     console.log('cached')
-  //     return Asset.fromModule(image).downloadAsync();
-  //   });
-  //   return Promise.all(cacheImages)
-  // }
+    const cacheImages = images.map((image) => {
+      console.log('cached')
+      return Asset.fromModule(image).downloadAsync();
+    });
+    return Promise.all(cacheImages)
+  }
 
   saveInfo = (data)=>{
     const stringData = JSON.stringify(data)
@@ -108,7 +114,7 @@ export default class App extends Component {
     const { isLoaded, isLogin, userInfo } = this.state;
     if(isLoaded){
       return (
-        <View style={styles.wrap}>
+        <ImageBackground source={background} style={styles.wrap}>
           { isLogin ? 
           <Saju
            changeUserInfo={this.changeUserInfo}
@@ -119,6 +125,7 @@ export default class App extends Component {
            total={total}
            work={work}
            setting={setting}
+           logo_width={logo_width}
           /> : 
           <Setting
             saveInfo={this.saveInfo}
@@ -127,14 +134,15 @@ export default class App extends Component {
             male_active={male_active}
             female_normal={female_normal}
             female_active={female_active}
+            button_save={button_save}
           />}
-        </View>
+        </ImageBackground >
       );
     }else{
       return (
         <AppLoading
-          // startAsync={this.loadResources}
-          // onFinish={() => this.setState({isLoaded: true})}
+          startAsync={this.loadResources}
+          onFinish={() => this.setState({isLoaded: true})}
           onError={console.warn}
         />
         // <View style={styles.wrap}>
@@ -162,24 +170,10 @@ export default class App extends Component {
 
 const styles = StyleSheet.create({
   wrap: {
-    flex: 1,
-    backgroundColor: '#ea838d',
+    width: '100%',
+    height: '100%',
+    // backgroundColor: '#ea838d',
     alignItems: 'center',
-    justifyContent: 'center',
+    justifyContent: 'flex-start',
   },
-  container: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  logo: {
-    flex: 8,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  bottomlogo: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-  }
 });

@@ -1,263 +1,319 @@
 import SvgUri from 'react-native-svg-uri';
 import React, { Component } from 'react';
 import SegmentedControlTab from 'react-native-segmented-control-tab';
-import { StyleSheet, Text, TouchableOpacity, View, SegmentedControlIOS, ScrollView, WebView } from 'react-native';
-// import love from '../img/love.svg';
-// import money from '../img/money.svg';
-// import study from '../img/study.svg';
-// import total from '../img/total.svg';
-// import work from '../img/work.svg';
-// import setting from '../img/setting.svg';
+import { StyleSheet, Text, TouchableOpacity, View, ScrollView, Image } from 'react-native';
+import Modal from "react-native-modal";
+import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
 
+let originalGetDefaultProps = Text.defaultProps;
+Text.defaultProps = function() {
+    return {
+        ...originalGetDefaultProps,
+        allowFontScaling: false,
+    };
+};
 export default class Saju extends Component {
+
+//     constructor() {
+//         super();
+//         Text.defaultProps.allowFontScaling=false;
+// }
+
     state = {
         selectedIndex: 0,
-        readMoreBlock: ''
+        readMoreBlock1: -1,
+        readMoreBlock2: -1,
+        modalVisible1: false,
+        modalVisible2: false,
     }
 
-    readMore = (i, e) => {
-        this.setState({
-            readMoreBlock: i
-        })
+    readMoreToday = (i, e) => {
+        if ( i === 0 ){
+            if(this.state.readMoreBlock1 === i){
+                this.setState({
+                    readMoreBlock1: -1,
+                    modalVisible1: false
+                })
+            }else{
+                this.setState({
+                    readMoreBlock1: i,
+                    modalVisible1: false
+                })
+            }
+        }else{
+            this.setState({
+                readMoreBlock1: i,
+                modalVisible1: true
+            })
+        }
     }
+
+    readMoreTomorrow = (i, e) => {
+        if ( i === 0 ){
+            if(this.state.readMoreBlock2 === i){
+                this.setState({
+                    readMoreBlock2: -1,
+                    modalVisible2: false
+                })
+            }else{
+                this.setState({
+                    readMoreBlock2: i,
+                    modalVisible2: false
+                })
+            }
+        }else{
+            this.setState({
+                readMoreBlock2: i,
+                modalVisible2: true
+            })
+        }
+    }
+
+    makeKeyword = (data) =>{
+        let arr = [];
+        let temp = data.split('<b>');
+        let temp1 = temp[1].split('</b>');
+        arr.push(temp[0]);
+        arr.push(temp1[0]);
+        arr.push(temp1[1]);
+        return arr
+    }
+
+    setModalVisibleToday = (visible) => {
+        this.setState({modalVisible1: visible});
+    }    
+
+    setModalVisibleTomorrow = (visible) => {
+        this.setState({modalVisible2: visible});
+    }    
+
     render(){
-        const { love, money, study, total, work, setting } = this.props;
+        const { love, money, study, total, work, setting, logo_width } = this.props;
         const data = this.props.fortuneData;
         if(data !== undefined){
         const day = data.day
         const month = data.month
         const tomorrow = data.tomorrow
-        const {selectedIndex, readMoreBlock} = this.state;
-        const dailyView = day.content.map(({desc, keyword, name}, i)=>{
-            let arr = [];
-            if(keyword !== undefined){
-                let temp = keyword.split('<b>');
-                let temp1 = temp[1].split('</b>');
-                arr.push(temp[0]);
-                arr.push(temp1[0]);
-                arr.push(temp1[1]);
-            }
-            let img;
-            switch (name){
-                case '총운':
-                img = total;
-                break;
-                case '애정운':
-                img = love;
-                break;
-                case '재물운':
-                img = money;
-                break;
-                case '직장운':
-                img = work;
-                break;
-                case '학업.시험운':
-                img = study;
-                break;
-                default:
-                img = '';
-                break;
-            }
-            if(i !== 5)
-            if (i % 2 !== 0){
-                return(
-                    <TouchableOpacity key={i} style={readMoreBlock === i ? styles.fortuneBlockMore : styles.fortuneBlock} onPress={this.readMore.bind(this, i)}>
-                        <View style={styles.txtWrap}>
-                            {arr.length > 0 ?
-                                <View style={styles.title}>
-                                <Text style={{color:'#fff',fontSize:11}}>{arr[0]}</Text>
-                                <Text style={{color:'#fff',fontSize:13, fontWeight:'bold'}}>{arr[1]}</Text>
-                                <Text style={{color:'#fff',fontSize:11}}>{arr[2]}</Text>
-                                </View>:null
-                            }
-                            <Text style={{color:'#fff',lineHeight:20,fontSize:9}}>{desc}</Text>
-                        </View>
-                        <View style={styles.imgWrap}>
-                            <SvgUri
-                                width="60"
-                                height="60"
-                                svgXmlData={img}
-                            />
-                            <Text style={styles.name}>{name}</Text>
-                        </View>
-                        {readMoreBlock !== i ? <Text style={styles.moreButton}>Read More!</Text> : null}
-                    </TouchableOpacity>
-                )
-            }else{
-                return(
-                    <TouchableOpacity key={i} style={readMoreBlock === i ? styles.fortuneBlockMore : styles.fortuneBlock} onPress={this.readMore.bind(this, i)}>
-                        <View style={styles.imgWrap}>
-                            <SvgUri
-                                width="60"
-                                height="60"
-                                svgXmlData={img}
-                            />
-                            <Text style={styles.name}>{name}</Text>
-                        </View>
-                        <View style={styles.txtWrap}>
-                            {arr.length > 0 ?
-                                <View style={styles.title}>
-                                <Text style={{color:'#fff',fontSize:11}}>{arr[0]}</Text>
-                                <Text style={{color:'#fff',fontSize:13, fontWeight:'bold'}}>{arr[1]}</Text>
-                                <Text style={{color:'#fff',fontSize:11}}>{arr[2]}</Text>
-                                </View>:null
-                            }
-                            <Text style={{color:'#fff',lineHeight:20,fontSize:9}}>{desc}</Text>
-                        </View>
-                        {readMoreBlock !== i ? <Text style={styles.moreButton}>Read More!</Text> : null}
-                    </TouchableOpacity>
-                )
-            }
-            
-        })
-        const tomorrowView = tomorrow.content.map(({desc, keyword, name}, i)=>{
-            let arr = [];
-            if(keyword !== undefined){
-                let temp = keyword.split('<b>');
-                let temp1 = temp[1].split('</b>');
-                arr.push(temp[0]);
-                arr.push(temp1[0]);
-                arr.push(temp1[1]);
-            }
-            let img;
-            switch (name){
-                case '총운':
-                img = total;
-                break;
-                case '애정운':
-                img = love;
-                break;
-                case '재물운':
-                img = money;
-                break;
-                case '직장운':
-                img = work;
-                break;
-                case '학업.시험운':
-                img = study;
-                break;
-                default:
-                img = '';
-                break;
-            }
-            if(i !== 5)
-            if (i % 2 !== 0){
-                return(
-                    <TouchableOpacity key={i} style={readMoreBlock === i ? styles.fortuneBlockMore : styles.fortuneBlock} onPress={this.readMore.bind(this, i)}>
-                        <View style={styles.txtWrap}>
-                            {arr.length > 0 ?
-                                <View style={styles.title}>
-                                <Text style={{color:'#fff',fontSize:11}}>{arr[0]}</Text>
-                                <Text style={{color:'#fff',fontSize:13, fontWeight:'bold'}}>{arr[1]}</Text>
-                                <Text style={{color:'#fff',fontSize:11}}>{arr[2]}</Text>
-                                </View>:null
-                            }
-                            <Text style={{color:'#fff',lineHeight:20,fontSize:9}}>{desc}</Text>
-                        </View>
-                        <View style={styles.imgWrap}>
-                            <SvgUri
-                                width="60"
-                                height="60"
-                                svgXmlData={img}
-                            />
-                            <Text style={styles.name}>{name}</Text>
-                        </View>
-                        {readMoreBlock !== i ? <Text style={styles.moreButton}>Read More!</Text> : null}
-                    </TouchableOpacity>
-                )
-            }else{
-                return(
-                    <TouchableOpacity key={i} style={readMoreBlock === i ? styles.fortuneBlockMore : styles.fortuneBlock} onPress={this.readMore.bind(this, i)}>
-                        <View style={styles.imgWrap}>
-                            <SvgUri
-                                width="60"
-                                height="60"
-                                svgXmlData={img}
-                            />
-                            <Text style={styles.name}>{name}</Text>
-                        </View>
-                        <View style={styles.txtWrap}>
-                            {arr.length > 0 ?
-                                <View style={styles.title}>
-                                <Text style={{color:'#fff',fontSize:11}}>{arr[0]}</Text>
-                                <Text style={{color:'#fff',fontSize:13, fontWeight:'bold'}}>{arr[1]}</Text>
-                                <Text style={{color:'#fff',fontSize:11}}>{arr[2]}</Text>
-                                </View>:null
-                            }
-                            <Text style={{color:'#fff',lineHeight:20,fontSize:9}}>{desc}</Text>
-                        </View>
-                        {readMoreBlock !== i ? <Text style={styles.moreButton}>Read More!</Text> : null}
-                    </TouchableOpacity>
-                )
-            }
-        })
-        const monthView = month.content.map(({desc, name}, i)=>{
-            let img;
-            switch (name){
-                case '총운':
-                img = total;
-                break;
-                case '애정운':
-                img = love;
-                break;
-                case '재물운':
-                img = money;
-                break;
-                case '직장운':
-                img = work;
-                break;
-                case '학업.시험운':
-                img = study;
-                break;
-                default:
-                img = '';
-                break;
-            }
-            return(
-                <View key={i} style={styles.fortuneBlockMore}>
-                    <View style={styles.imgWrap}>
-                    <SvgUri
-                        width="60"
-                        height="60"
-                        svgXmlData={img}
-                    />
-                    <Text style={styles.name}>{name}</Text>
+        const {selectedIndex, readMoreBlock1, readMoreBlock2, modalVisible1, modalVisible2} = this.state;
+        const arrToday = this.makeKeyword(day.content[0].keyword);
+        const arrTomorrow = this.makeKeyword(tomorrow.content[0].keyword);
+
+        const dailyView = (
+            <ScrollView style={styles.scrollBox}>
+                <TouchableOpacity style={readMoreBlock1 === 0 ? styles.fortuneBlockMore : styles.fortuneBlock} onPress={this.readMoreToday.bind(this, 0)}>
+                    <View style={styles.nameWrap}>
+                        <Text style={styles.name}>{day.content[0].name}</Text>
                     </View>
                     <View style={styles.txtWrap}>
-                    <Text style={{color:'#fff',lineHeight:20,fontSize:9}}>{desc}</Text>
+                        {arrToday.length > 0 ?
+                            <View style={styles.title}>
+                                <Text style={styles.titleText}>{arrToday[0]}</Text>
+                                <Text style={styles.titleText}>{arrToday[1]}</Text>
+                                <Text style={styles.titleText}>{arrToday[2]}</Text>
+                            </View>:null
+                        }
+                        <Text style={styles.descText}>{day.content[0].desc}</Text>
                     </View>
+                    {readMoreBlock1 !== 0 ? <Text style={styles.moreButton}>Read More!</Text> : null}
+                </TouchableOpacity>
+                <View style={{flexDirection:'row', justifyContent:'space-between'}}>
+                    <TouchableOpacity style={styles.fortuneBlockHalf} onPress={this.readMoreToday.bind(this, 1)}>
+                        <View style={styles.nameWrap}>
+                            <Text style={styles.name}>{day.content[1].name}</Text>
+                        </View>
+                        <View style={styles.txtWrap}>
+                            <Text style={styles.descText}>{day.content[1].desc}</Text>
+                        </View>
+                        <Text style={styles.moreButton}>Read More!</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity style={styles.fortuneBlockHalf} onPress={this.readMoreToday.bind(this, 2)}>
+                        <View style={styles.nameWrap}>
+                            <Text style={styles.name}>{day.content[2].name}</Text>
+                        </View>
+                        <View style={styles.txtWrap}>
+                            <Text style={styles.descText}>{day.content[2].desc}</Text>
+                        </View>
+                        <Text style={styles.moreButton}>Read More!</Text>
+                    </TouchableOpacity>
                 </View>
-            )
-        })
+                <View style={{flexDirection:'row', justifyContent:'space-between'}}>
+                    <TouchableOpacity style={styles.fortuneBlockHalf} onPress={this.readMoreToday.bind(this, 3)}>
+                        <View style={styles.nameWrap}>
+                            <Text style={styles.name}>{day.content[3].name}</Text>
+                        </View>
+                        <View style={styles.txtWrap}>
+                            <Text style={styles.descText}>{day.content[3].desc}</Text>
+                        </View>
+                        <Text style={styles.moreButton}>Read More!</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity style={styles.fortuneBlockHalf} onPress={this.readMoreToday.bind(this, 4)}>
+                        <View style={styles.nameWrap}>
+                            <Text style={styles.name}>{day.content[4].name}</Text>
+                        </View>
+                        <View style={styles.txtWrap}>
+                            <Text style={styles.descText}>{day.content[4].desc}</Text>
+                        </View>
+                        <Text style={styles.moreButton}>Read More!</Text>
+                    </TouchableOpacity>
+                </View>
+                <Modal
+                    isVisible={modalVisible1}
+                    style={{alignItems: 'center',}}
+                    onBackdropPress={() => this.setState({ modalVisible1: false })}
+                    // onSwipe={() => this.setState({ modalVisible1: false })}
+                    onBackButtonPress={() => this.setState({ modalVisible1: false })}
+                >
+                    {readMoreBlock1 !== -1 ? <View style={styles.modalStyle}>
+                        <View style={styles.nameWrap}>
+                            <Text style={styles.name}>{day.content[readMoreBlock1].name}</Text>
+                        </View>
+                        <View style={styles.txtWrap}>
+                            <Text style={styles.descText}>{day.content[readMoreBlock1].desc}</Text>
+                        </View>
+                        <TouchableOpacity
+                            onPress={() => {
+                            this.setModalVisibleToday(!modalVisible1);
+                            }}
+                        >
+                            <Text style={styles.modalCloseButton} >Hide Modal</Text>
+                        </TouchableOpacity>
+                    </View> : ''}
+                </Modal>                
+            </ScrollView>
+        )
+        const tomorrowView = (
+            <ScrollView style={styles.scrollBox}>
+                <TouchableOpacity style={readMoreBlock2 === 0 ? styles.fortuneBlockMore : styles.fortuneBlock} onPress={this.readMoreTomorrow.bind(this, 0)}>
+                    <View style={styles.nameWrap}>
+                        <Text style={styles.name}>{tomorrow.content[0].name}</Text>
+                    </View>
+                    <View style={styles.txtWrap}>
+                        {arrTomorrow.length > 0 ?
+                            <View style={styles.title}>
+                                <Text style={styles.titleText}>{arrTomorrow[0]}</Text>
+                                <Text style={styles.titleText}>{arrTomorrow[1]}</Text>
+                                <Text style={styles.titleText}>{arrTomorrow[2]}</Text>
+                            </View>:null
+                        }
+                        <Text style={styles.descText}>{tomorrow.content[0].desc}</Text>
+                    </View>
+                    {readMoreBlock2 !== 0 ? <Text style={styles.moreButton}>Read More!</Text> : null}
+                </TouchableOpacity>
+                <View style={{flexDirection:'row', justifyContent:'space-between'}}>
+                    <TouchableOpacity style={styles.fortuneBlockHalf} onPress={this.readMoreTomorrow.bind(this, 1)}>
+                        <View style={styles.nameWrap}>
+                            <Text style={styles.name}>{tomorrow.content[1].name}</Text>
+                        </View>
+                        <View style={styles.txtWrap}>
+                            <Text style={styles.descText}>{tomorrow.content[1].desc}</Text>
+                        </View>
+                        <Text style={styles.moreButton}>Read More!</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity style={styles.fortuneBlockHalf} onPress={this.readMoreTomorrow.bind(this, 2)}>
+                        <View style={styles.nameWrap}>
+                            <Text style={styles.name}>{tomorrow.content[2].name}</Text>
+                        </View>
+                        <View style={styles.txtWrap}>
+                            <Text style={styles.descText}>{tomorrow.content[2].desc}</Text>
+                        </View>
+                        <Text style={styles.moreButton}>Read More!</Text>
+                    </TouchableOpacity>
+                </View>
+                <View style={{flexDirection:'row', justifyContent:'space-between'}}>
+                    <TouchableOpacity style={styles.fortuneBlockHalf} onPress={this.readMoreTomorrow.bind(this, 3)}>
+                        <View style={styles.nameWrap}>
+                            <Text style={styles.name}>{tomorrow.content[3].name}</Text>
+                        </View>
+                        <View style={styles.txtWrap}>
+                            <Text style={styles.descText}>{tomorrow.content[3].desc}</Text>
+                        </View>
+                        <Text style={styles.moreButton}>Read More!</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity style={styles.fortuneBlockHalf} onPress={this.readMoreTomorrow.bind(this, 4)}>
+                        <View style={styles.nameWrap}>
+                            <Text style={styles.name}>{tomorrow.content[4].name}</Text>
+                        </View>
+                        <View style={styles.txtWrap}>
+                            <Text style={styles.descText}>{tomorrow.content[4].desc}</Text>
+                        </View>
+                        <Text style={styles.moreButton}>Read More!</Text>
+                    </TouchableOpacity>
+                </View>
+                <Modal
+                    isVisible={modalVisible2}
+                    style={{alignItems: 'center',}}
+                    onBackdropPress={() => this.setState({ modalVisible: false })}
+                    // onSwipe={() => this.setState({ modalVisible: false })}
+                    onBackButtonPress={() => this.setState({ modalVisible: false })}
+                >
+                    {readMoreBlock2 !== -1 ? <View style={styles.modalStyle}>
+                        <View style={styles.nameWrap}>
+                            <Text style={styles.name}>{tomorrow.content[readMoreBlock2].name}</Text>
+                        </View>
+                        <View style={styles.txtWrap}>
+                            <Text style={styles.descText}>{tomorrow.content[readMoreBlock2].desc}</Text>
+                        </View>
+                        <TouchableOpacity
+                            onPress={() => {
+                            this.setModalVisibleTomorrow(!modalVisible2);
+                            }}
+                        >
+                            <Text style={styles.modalCloseButton} >Hide Modal</Text>
+                        </TouchableOpacity>
+                    </View> : ''}
+                </Modal>                
+            </ScrollView>
+        )
+        const monthView = (
+            <ScrollView style={styles.scrollBox}>
+                <TouchableOpacity style={styles.fortuneBlockMore}>
+                    <View style={styles.nameWrap}>
+                        <Text style={styles.name}>{month.content[0].name}</Text>
+                    </View>
+                    <View style={styles.txtWrap}>
+                        <Text style={styles.descText}>{month.content[0].desc}</Text>
+                    </View>
+                </TouchableOpacity>
+            </ScrollView>
+        )
+        const userInfoTitle = day.title.replace('생,', '\n')
 
         return(
             <View style={styles.container}>
                 <View style={styles.topBar}>
-                    <Text style={styles.userInfo}>{day.title}</Text>
-                    
+                    <View>
+                        <Image
+                            style={{width: wp(25)}}
+                            resizeMode={'contain'}
+                            source={logo_width}
+                        />
+                    </View>
                     <TouchableOpacity onPress={this.props.changeUserInfo}>
-                    <View style={styles.setting}>
-                    <SvgUri
-                        width="20"
-                        height="20"
-                        svgXmlData={setting}
-                    />
-                    </View>
+                        <View style={styles.setting}>
+                            <SvgUri
+                                width="20"
+                                height="20"
+                                svgXmlData={setting}
+                            />
+                        </View>
                     </TouchableOpacity>
-                    </View>
+                </View>
+                <View style={styles.userInfo}>
+                    <Text style={styles.userInfoTitle}>{userInfoTitle}</Text>
+                </View>
                 <SegmentedControlTab
+                    tabsContainerStyle={{borderTopLeftRadius:0, marginBottom: wp(3)}}
                     values={['오늘의운세', '내일의운세', '이달의운세']}
                     selectedIndex={selectedIndex}
                     onTabPress={this.changeView}
                     tabTextStyle={{color:'#fff'}}
-                    tabStyle={{backgroundColor:'#ea838d',borderColor:'#fff'}}
-                    activeTabStyle={{backgroundColor:'#fff'}}
-                    activeTabTextStyle={{color:'#ea838d'}}
+                    tabStyle={{backgroundColor:'transparent', borderColor:'rgba(255,255,255,0.2)'}}
+                    activeTabStyle={{backgroundColor:'rgba(255,255,255,0.2)'}}
+                    activeTabTextStyle={{color:'#fff'}}
+                   
                 />
-                {selectedIndex === 0 ? 
-                <ScrollView style={styles.scrollBox}>
-                {dailyView}
-                </ScrollView> :
+                {selectedIndex === 0 ? dailyView
+                :
                 <ScrollView style={styles.scrollBox}>
                 {selectedIndex === 1 ? tomorrowView : monthView}
                 </ScrollView>}
@@ -279,115 +335,142 @@ export default class Saju extends Component {
 
 const styles = StyleSheet.create({
     container: {
-        // alignItems: 'center',
-        justifyContent: 'center',
-        paddingTop: 30,
-        paddingLeft: 20,
-        paddingRight: 20,
+        flexDirection: 'column',
+        alignItems: 'stretch',
+        justifyContent: 'flex-start',
+        paddingTop: hp(5),
+        paddingLeft: wp(5),
+        paddingRight: wp(5),
         paddingBottom: 0,
-    },
-    setting: {
-        color:'#333',
-        padding: 10,
-        alignItems: 'center',
-        justifyContent: 'center',   
+        width: wp(100),
     },
     topBar: {
-        // flex:1,
-        alignItems: 'flex-end',
+        height:hp(5),
+        width: wp(90),   
         flexDirection: 'row',
+        alignItems: 'center',
         justifyContent: 'space-between'
     },
-    scrollBox: {
-        paddingTop: 20,
-        paddingBottom: 10,
-    },
-    imgWrap: {
+    setting: {
+        // padding: wp(3),
         alignItems: 'center',
-        justifyContent: 'center', 
-        width: '25%'  
-    },
-    txtWrap: {
-        paddingLeft: 10,
-        paddingRight: 10,
-        paddingBottom: 10,
-        paddingTop: 10,
-        width: '75%' ,
-        height:'100%',
-        overflow:'hidden',
+        justifyContent: 'center',      
     },
     userInfo: {
-        color: '#fff',
-        paddingBottom: 10
+        paddingBottom: hp(5),
+        paddingTop:  hp(3),
+        alignItems: 'center',
+        justifyContent: 'center',
+        width: wp(90)   
+    },
+    userInfoTitle: {
+        color: '#dbdbdb',
+        textAlign: 'center',
+        fontSize: hp(2)
+    },
+    scrollBox: {
+        paddingBottom: wp(2),
+        marginBottom: hp(5)
+    },
+    fortuneBlock: {
+        paddingTop: wp(3),
+        paddingLeft: wp(2),
+        paddingRight: wp(2),
+        paddingBottom: hp(2),
+        backgroundColor: '#fff',
+        marginBottom: wp(3),
+        height: hp(22),
+        position: 'relative',
+        overflow:'hidden',
+    },
+    fortuneBlockMore: {
+        paddingTop: wp(2),
+        paddingLeft: wp(2),
+        paddingRight: wp(2),
+        paddingBottom: wp(2),
+        backgroundColor: '#fff',
+        marginBottom: wp(3),
+    },
+    fortuneBlockHalf: {
+        width: '48%',
+        paddingTop: wp(3),
+        paddingLeft: wp(2),
+        paddingRight: wp(2),
+        paddingBottom: hp(2),
+        backgroundColor: '#fff',
+        marginBottom: wp(3),
+        height: hp(22),
+        position: 'relative',
+        overflow:'hidden',
+    },
+    fortuneBlockMoreHalf: {
+        width: '48%',
+        paddingTop: wp(2),
+        paddingLeft: wp(2),
+        paddingRight: wp(2),
+        paddingBottom: wp(2),
+        backgroundColor: '#fff',
+        marginBottom: wp(3),
+    },
+    nameWrap: {
+        borderBottomColor: '#425060',
+        borderBottomWidth:1,
+        paddingBottom: wp(2),
+        paddingLeft: wp(2),
+    },
+    name: {
+        borderRadius: 5,
+        fontSize: wp(4.5),
+        overflow:'hidden',
+        color:'#425060',
+    },
+    txtWrap: {
+        padding: wp(2),
+        overflow:'hidden'
     },
     title: {
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'center',   
-        paddingLeft: 10,
-        paddingRight: 10,
-        paddingBottom: 10,
-        marginTop: -10,
+        paddingBottom: wp(2),
     },
-    fortuneBlock: {
-        flex:1,
-        paddingTop: 10,
-        paddingLeft: 10,
-        paddingRight: 10,
-        paddingBottom: 30,
-        borderColor: '#fff',
-        borderBottomWidth: 1,
-        marginBottom: 10,
-        flexDirection: 'row',
-        height: 100,
-        position: 'relative',
-        overflow:"hidden"
-        // justifyContent: 'space-between',
+    titleText: {
+        color:'#4f72b3',
+        fontSize:wp(4)
     },
-    fortuneBlockMore: {
-        flex:1,
-        // paddingTop: 10,
-        paddingLeft: 10,
-        paddingRight: 10,
-        paddingBottom: 10,
-        borderColor: '#fff',
-        borderBottomWidth: 1,
-        marginBottom: 0,
-        flexDirection: 'row',
+    descText: {
+        color:'#515151',
+        lineHeight:wp(5),
+        fontSize:wp(3.5)
     },
     moreButton: {
         position:'absolute',
-        bottom: 5,
-        left: '50%',
+        bottom: 0,
+        width: '106%',
         textAlign: 'center',
-        marginLeft: -18,
-        paddingTop: 3,
-        paddingLeft: 3,
-        paddingRight: 3,
-        paddingBottom: 3,
-        // backgroundColor: '#fff',
-        borderRadius: 5,
-        fontSize: 10,
-        overflow:'hidden',
-        // borderWidth: 1,
-        // borderColor: '#fff',
-        // color:'#ea838d',
-        color: '#fff',
-        // fontWeight: 'bold'
-    },
-    name: {
-        paddingTop: 5,
-        paddingLeft: 5,
-        paddingRight: 5,
-        paddingBottom: 5,
+        padding: wp(2),
         backgroundColor: '#fff',
         borderRadius: 5,
         fontSize: 10,
         overflow:'hidden',
         // borderWidth: 1,
         // borderColor: '#fff',
-        color:'#ea838d',
-        // color: '#fff',
+        // color:'#ea838d',
+        color: '#515151',
         // fontWeight: 'bold'
+    },
+    modalStyle: {
+        backgroundColor:'#fff',
+        width: wp(80),
+        padding: 20
+    },
+    modalCloseButton: {
+        padding: 10,
+        // backgroundColor: '#4f72b3',
+        borderColor: '#4f72b3',
+        borderWidth: 1,
+        // color: '#fff',
+        color: '#4f72b3',
+        textAlign: 'center'
     }
 })

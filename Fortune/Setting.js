@@ -1,18 +1,29 @@
 import SvgUri from 'react-native-svg-uri';
 import React, { Component } from 'react';
 import SegmentedControlTab from 'react-native-segmented-control-tab';
-import { StyleSheet, Text, View, TextInput, TouchableOpacity, TouchableWithoutFeedback, Keyboard, SegmentedControlIOS, Picker, TouchableHighlight  } from 'react-native';
-import { LinearGradient } from 'expo';
-// import male_normal from '../img/male_normal.svg';
-// import male_active from '../img/male_active.svg';
-// import female_normal from '../img/female_normal.svg';
-// import female_active from '../img/female_active.svg';
+import { StyleSheet, Text, View, TextInput, TouchableOpacity, TouchableWithoutFeedback, Keyboard, Image, TouchableHighlight  } from 'react-native';
+import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
+import Modal from "react-native-modal";
+// import { throws } from 'assert';
+
+let originalGetDefaultPropsText = Text.defaultProps;
+Text.defaultProps = function() {
+    return {
+        ...originalGetDefaultPropsText,
+        allowFontScaling: false,
+    };
+};
+
+let originalGetDefaultPropsTextInput = TextInput.defaultProps;
+TextInput.defaultProps = function() {
+    return {
+        ...originalGetDefaultPropsTextInput,
+        allowFontScaling: false,
+    };
+};
 
 const timeData = [
     {
-        value: '',
-        text: '모름'
-    },{
         value: 0,
         text: '자시(子時) 23:30~01:29'
     },{
@@ -55,15 +66,17 @@ export default class Setting extends Component {
     state = {
         gender: this.props.userInfo.gender,
         birth: this.props.userInfo.birth,
+        timeText: this.props.userInfo.timeText,
         solarCal: this.props.userInfo.solarCal,
         time: this.props.userInfo.time,
-        selectedIndex: this.props.userInfo.selectedIndex
+        selectedIndex: this.props.userInfo.selectedIndex,
+        isVisible: false
     }
-    componentWillReceiveProps=(nextProps)=>{
-        if(nextProps.userInfo !== this.state){
-            this.setState(nextProps.userInfo)
-        }
-    }
+    // componentWillReceiveProps=(nextProps)=>{
+    //     if(nextProps.userInfo !== this.state){
+    //         this.setState(nextProps.userInfo)
+    //     }
+    // }
     
     selectGender = (gender) => {
         // console.log(gender)
@@ -72,17 +85,26 @@ export default class Setting extends Component {
             gender: gender
         })
     }
+
+    toggleModal = (visible) => {
+        this.setState({
+            isVisible: visible
+        })
+    }
+
     render(){
-        const { female_active, female_normal, male_active, male_normal } = this.props;
+        const { female_active, female_normal, male_active, male_normal, button_save } = this.props;
         console.log(this.props.userInfo)
         const timeList = timeData.map((data, i)=> {
             return(
-                <Picker.Item key={i} label={data.text} value={data.value} color='#ea838d' />
+                <TouchableOpacity key={i} style={styles.timeItemWrap} onPress={()=>this.setState({time: data.value, timeText:data.text, isVisible:false})}>
+                <Text style={styles.timeItem}>{data.text}</Text>
+                </TouchableOpacity>
             )
         })
         return(
             <View style={styles.container}>
-                <TouchableWithoutFeedback style={{borderWidth:1, borderColor:'blue'}} onPress={Keyboard.dismiss}>
+                <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
                     <View style={styles.form}>
                         <View style={styles.gender}>
                             <TouchableOpacity style={styles.img} onPress={()=>this.selectGender('m')}>
@@ -100,10 +122,20 @@ export default class Setting extends Component {
                             />
                             </TouchableOpacity>
                         </View>
+                        <SegmentedControlTab
+                            tabsContainerStyle={{borderRadius:0, marginBottom: wp(5)}}
+                            values={['양력', '음력', '윤달']}
+                            selectedIndex={this.state.selectedIndex}
+                            onTabPress={this.changeSolar}
+                            tabTextStyle={{color:'#fff'}}
+                            tabStyle={{backgroundColor:'transparent', borderColor:'rgba(255,255,255,0.2)'}}
+                            activeTabStyle={{backgroundColor:'rgba(255,255,255,0.2)'}}
+                            activeTabTextStyle={{color:'#fff'}}
+                        />
                         <View style={styles.birth}>
                             <Text style={styles.text}>생년월일  </Text>
                             <TextInput 
-                                onChangeText={(birth) => this.setState({birth})}
+                                onChangeText={(birth) => this.setState({birth: birth})}
                                 value={this.state.birth}
                                 keyboardType={'number-pad'}
                                 style= {{width:'70%', borderBottomColor:'rgba(255,255,255,0.5)', borderBottomWidth: 1, textAlign:'center', color:'#fff'}}
@@ -113,37 +145,33 @@ export default class Setting extends Component {
                                 underlineColorAndroid={"transparent"}
                             />
                         </View>
-                        <SegmentedControlTab
-                            values={['양력', '음력', '윤달']}
-                            selectedIndex={this.state.selectedIndex}
-                            onTabPress={this.changeSolar}
-                            tabTextStyle={{color:'#fff'}}
-                            tabStyle={{backgroundColor:'#ea838d',borderColor:'#fff'}}
-                            activeTabStyle={{backgroundColor:'#fff'}}
-                            activeTabTextStyle={{color:'#ea838d'}}
-                        />
                         <View style={styles.birth}>
                             <Text style={styles.text}>생시  </Text>
-                            <View style={{width:'70%', height:"20%", textAlign:'center'}}>
-                            <Picker
-                                selectedValue={this.state.time}
-                                style={styles.picker}
-                                onValueChange={(itemValue) => this.setState({time: itemValue})}
-                                // itemStyle={{color:'#ea838d'}}
-                                // textStyle={{fontSize:8}} 
-                                // mode={"dropdown"}
-                            >
-                            {timeList}
-                            </Picker>
-                            </View>
+                            <TouchableOpacity onPress={()=>this.toggleModal(true)} style= {{width:'70%', height: wp(8), backgroundColor:'rgba(255,255,255,0.5)'}}>
+                                <Text style= {{textAlign:'center', color:'#fff', height: wp(8), lineHeight: wp(10)}}>
+                                    {this.state.timeText}
+                                </Text>
+                            </TouchableOpacity>
                         </View>
-                        
+                        <Modal
+                            isVisible={this.state.isVisible}
+                            style={{alignItems: 'center',}}
+                            onBackdropPress={() => this.toggleModal(false)}
+                            // onSwipe={() => this.setState({ isVisible: false })}
+                            onBackButtonPress={() =>  this.toggleModal(false)}
+                        >
+                            <View style={styles.modalStyle}>
+                               {timeList}
+                            </View>
+                        </Modal>
                     </View>
                 </TouchableWithoutFeedback>
-                <TouchableWithoutFeedback style={{borderWidth:1, borderColor:'red'}} onPress={this.saveInfo}>
-                    <View style={styles.button}>
-                        <Text style={styles.buttonText}>저장</Text>
-                    </View>
+                <TouchableWithoutFeedback style={{marginBottom:hp(30),}} onPress={this.saveInfo}>
+                    <Image
+                        style={{width: wp(50)}}
+                        resizeMode={'contain'}
+                        source={button_save}
+                    />
                 </TouchableWithoutFeedback>
             </View>
         )
@@ -168,17 +196,16 @@ export default class Setting extends Component {
 const styles = StyleSheet.create({
     container: {
         alignItems: 'center',
-        paddingTop: 0,
+        paddingTop: hp(30),
     },
     form: {
-        flex: 3,
         // alignItems: 'center',
         justifyContent: 'center',
         width: 200,
     },
     buttonText: {
         padding: 20,
-        color: '#ea838d'
+        color: '#fff'
     },
     button: {
         marginBottom: 30,
@@ -214,10 +241,22 @@ const styles = StyleSheet.create({
         // top: 0,
         // left: 0,
         // right: 0,
-        backgroundColor: '#fff',
+        backgroundColor: 'rgba(255,255,255,0.3)',
         height: '100%',
         // borderColor: "#fff",
         // borderBottomWidth: 1,
+    },
+    modalStyle: {
+        backgroundColor:'#fff',
+        width: wp(80),
+        padding: 20
+    },
+    timeItem:{
+        padding: wp(2),
+        color:'#515151',
+    },
+    timeItemWrap: {
+        borderBottomColor: '#fff',
+        borderBottomWidth:1
     }
-
 })
