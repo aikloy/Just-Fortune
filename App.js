@@ -15,9 +15,26 @@ import button_save from './assets/button_save.png';
 import logo_width from './assets/logo_width.png';
 import background from './assets/background.png';
 import React, { Component } from 'react';
-import { StyleSheet, ImageBackground , AsyncStorage } from 'react-native';
+import { StyleSheet, ImageBackground , AsyncStorage, TextInput, Text } from 'react-native';
 import { Asset, AppLoading } from 'expo';
 import { Saju, Setting } from './Fortune';
+
+
+let originalGetDefaultPropsText = Text.defaultProps;
+Text.defaultProps = function() {
+    return {
+        ...originalGetDefaultPropsText,
+        allowFontScaling: false,
+    };
+};
+
+let originalGetDefaultPropsTextInput = TextInput.defaultProps;
+TextInput.defaultProps = function() {
+    return {
+        ...originalGetDefaultPropsTextInput,
+        allowFontScaling: false,
+    };
+};
 
 export default class App extends Component {
   state = {

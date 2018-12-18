@@ -6,12 +6,8 @@ import Modal from "react-native-modal";
 import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
 
 let originalGetDefaultProps = Text.defaultProps;
-Text.defaultProps = function() {
-    return {
-        ...originalGetDefaultProps,
-        allowFontScaling: false,
-    };
-};
+Text.defaultProps = { ...(Text.defaultProps || {}), allowFontScaling: false }
+
 export default class Saju extends Component {
 
 //     constructor() {
@@ -102,82 +98,84 @@ export default class Saju extends Component {
             <ScrollView style={styles.scrollBox}>
                 <TouchableOpacity style={readMoreBlock1 === 0 ? styles.fortuneBlockMore : styles.fortuneBlock} onPress={this.readMoreToday.bind(this, 0)}>
                     <View style={styles.nameWrap}>
-                        <Text style={styles.name}>{day.content[0].name}</Text>
+                        <Text allowFontScaling={false} style={styles.name}>{day.content[0].name}</Text>
                     </View>
                     <View style={styles.txtWrap}>
                         {arrToday.length > 0 ?
                             <View style={styles.title}>
-                                <Text style={styles.titleText}>{arrToday[0]}</Text>
-                                <Text style={styles.titleText}>{arrToday[1]}</Text>
-                                <Text style={styles.titleText}>{arrToday[2]}</Text>
+                                <Text allowFontScaling={false} style={styles.titleText}>{arrToday[0]}</Text>
+                                <Text allowFontScaling={false} style={styles.titleText}>{arrToday[1]}</Text>
+                                <Text allowFontScaling={false} style={styles.titleText}>{arrToday[2]}</Text>
                             </View>:null
                         }
-                        <Text style={styles.descText}>{day.content[0].desc}</Text>
+                        <Text allowFontScaling={false} style={styles.descText}>{day.content[0].desc}</Text>
                     </View>
                     {readMoreBlock1 !== 0 ? <Text style={styles.moreButton}>Read More!</Text> : null}
                 </TouchableOpacity>
                 <View style={{flexDirection:'row', justifyContent:'space-between'}}>
                     <TouchableOpacity style={styles.fortuneBlockHalf} onPress={this.readMoreToday.bind(this, 1)}>
                         <View style={styles.nameWrap}>
-                            <Text style={styles.name}>{day.content[1].name}</Text>
+                            <Text allowFontScaling={false} style={styles.name}>{day.content[1].name}</Text>
                         </View>
                         <View style={styles.txtWrap}>
-                            <Text style={styles.descText}>{day.content[1].desc}</Text>
+                            <Text allowFontScaling={false} style={styles.descText}>{day.content[1].desc}</Text>
                         </View>
-                        <Text style={styles.moreButton}>Read More!</Text>
+                        <Text allowFontScaling={false} style={styles.moreButton}>Read More!</Text>
                     </TouchableOpacity>
                     <TouchableOpacity style={styles.fortuneBlockHalf} onPress={this.readMoreToday.bind(this, 2)}>
                         <View style={styles.nameWrap}>
-                            <Text style={styles.name}>{day.content[2].name}</Text>
+                            <Text allowFontScaling={false} style={styles.name}>{day.content[2].name}</Text>
                         </View>
                         <View style={styles.txtWrap}>
-                            <Text style={styles.descText}>{day.content[2].desc}</Text>
+                            <Text allowFontScaling={false} style={styles.descText}>{day.content[2].desc}</Text>
                         </View>
-                        <Text style={styles.moreButton}>Read More!</Text>
+                        <Text allowFontScaling={false} style={styles.moreButton}>Read More!</Text>
                     </TouchableOpacity>
                 </View>
                 <View style={{flexDirection:'row', justifyContent:'space-between'}}>
                     <TouchableOpacity style={styles.fortuneBlockHalf} onPress={this.readMoreToday.bind(this, 3)}>
                         <View style={styles.nameWrap}>
-                            <Text style={styles.name}>{day.content[3].name}</Text>
+                            <Text allowFontScaling={false} style={styles.name}>{day.content[3].name}</Text>
                         </View>
                         <View style={styles.txtWrap}>
-                            <Text style={styles.descText}>{day.content[3].desc}</Text>
+                            <Text allowFontScaling={false} style={styles.descText}>{day.content[3].desc}</Text>
                         </View>
-                        <Text style={styles.moreButton}>Read More!</Text>
+                        <Text allowFontScaling={false} style={styles.moreButton}>Read More!</Text>
                     </TouchableOpacity>
                     <TouchableOpacity style={styles.fortuneBlockHalf} onPress={this.readMoreToday.bind(this, 4)}>
                         <View style={styles.nameWrap}>
-                            <Text style={styles.name}>{day.content[4].name}</Text>
+                            <Text allowFontScaling={false} style={styles.name}>{day.content[4].name}</Text>
                         </View>
                         <View style={styles.txtWrap}>
-                            <Text style={styles.descText}>{day.content[4].desc}</Text>
+                            <Text allowFontScaling={false} style={styles.descText}>{day.content[4].desc}</Text>
                         </View>
-                        <Text style={styles.moreButton}>Read More!</Text>
+                        <Text allowFontScaling={false} style={styles.moreButton}>Read More!</Text>
                     </TouchableOpacity>
                 </View>
                 <Modal
                     isVisible={modalVisible1}
-                    style={{alignItems: 'center',}}
+                    style={{alignItems: 'center',justifyContent: 'center'}}
                     onBackdropPress={() => this.setState({ modalVisible1: false })}
                     // onSwipe={() => this.setState({ modalVisible1: false })}
                     onBackButtonPress={() => this.setState({ modalVisible1: false })}
                 >
+                    <ScrollView>
                     {readMoreBlock1 !== -1 ? <View style={styles.modalStyle}>
                         <View style={styles.nameWrap}>
-                            <Text style={styles.name}>{day.content[readMoreBlock1].name}</Text>
+                            <Text allowFontScaling={false} style={styles.name}>{day.content[readMoreBlock1].name}</Text>
                         </View>
                         <View style={styles.txtWrap}>
-                            <Text style={styles.descText}>{day.content[readMoreBlock1].desc}</Text>
+                            <Text allowFontScaling={false} style={styles.descText}>{day.content[readMoreBlock1].desc}</Text>
                         </View>
                         <TouchableOpacity
                             onPress={() => {
                             this.setModalVisibleToday(!modalVisible1);
                             }}
                         >
-                            <Text style={styles.modalCloseButton} >Hide Modal</Text>
+                            <Text allowFontScaling={false} style={styles.modalCloseButton} >닫기</Text>
                         </TouchableOpacity>
                     </View> : ''}
+                    </ScrollView>
                 </Modal>                
             </ScrollView>
         )
@@ -185,82 +183,84 @@ export default class Saju extends Component {
             <ScrollView style={styles.scrollBox}>
                 <TouchableOpacity style={readMoreBlock2 === 0 ? styles.fortuneBlockMore : styles.fortuneBlock} onPress={this.readMoreTomorrow.bind(this, 0)}>
                     <View style={styles.nameWrap}>
-                        <Text style={styles.name}>{tomorrow.content[0].name}</Text>
+                        <Text allowFontScaling={false} style={styles.name}>{tomorrow.content[0].name}</Text>
                     </View>
                     <View style={styles.txtWrap}>
                         {arrTomorrow.length > 0 ?
                             <View style={styles.title}>
-                                <Text style={styles.titleText}>{arrTomorrow[0]}</Text>
-                                <Text style={styles.titleText}>{arrTomorrow[1]}</Text>
-                                <Text style={styles.titleText}>{arrTomorrow[2]}</Text>
+                                <Text allowFontScaling={false} style={styles.titleText}>{arrTomorrow[0]}</Text>
+                                <Text allowFontScaling={false} style={styles.titleText}>{arrTomorrow[1]}</Text>
+                                <Text allowFontScaling={false} style={styles.titleText}>{arrTomorrow[2]}</Text>
                             </View>:null
                         }
-                        <Text style={styles.descText}>{tomorrow.content[0].desc}</Text>
+                        <Text allowFontScaling={false} style={styles.descText}>{tomorrow.content[0].desc}</Text>
                     </View>
                     {readMoreBlock2 !== 0 ? <Text style={styles.moreButton}>Read More!</Text> : null}
                 </TouchableOpacity>
                 <View style={{flexDirection:'row', justifyContent:'space-between'}}>
                     <TouchableOpacity style={styles.fortuneBlockHalf} onPress={this.readMoreTomorrow.bind(this, 1)}>
                         <View style={styles.nameWrap}>
-                            <Text style={styles.name}>{tomorrow.content[1].name}</Text>
+                            <Text allowFontScaling={false} style={styles.name}>{tomorrow.content[1].name}</Text>
                         </View>
                         <View style={styles.txtWrap}>
-                            <Text style={styles.descText}>{tomorrow.content[1].desc}</Text>
+                            <Text allowFontScaling={false} style={styles.descText}>{tomorrow.content[1].desc}</Text>
                         </View>
-                        <Text style={styles.moreButton}>Read More!</Text>
+                        <Text allowFontScaling={false} style={styles.moreButton}>Read More!</Text>
                     </TouchableOpacity>
                     <TouchableOpacity style={styles.fortuneBlockHalf} onPress={this.readMoreTomorrow.bind(this, 2)}>
                         <View style={styles.nameWrap}>
-                            <Text style={styles.name}>{tomorrow.content[2].name}</Text>
+                            <Text allowFontScaling={false} style={styles.name}>{tomorrow.content[2].name}</Text>
                         </View>
                         <View style={styles.txtWrap}>
-                            <Text style={styles.descText}>{tomorrow.content[2].desc}</Text>
+                            <Text allowFontScaling={false} style={styles.descText}>{tomorrow.content[2].desc}</Text>
                         </View>
-                        <Text style={styles.moreButton}>Read More!</Text>
+                        <Text allowFontScaling={false} style={styles.moreButton}>Read More!</Text>
                     </TouchableOpacity>
                 </View>
                 <View style={{flexDirection:'row', justifyContent:'space-between'}}>
                     <TouchableOpacity style={styles.fortuneBlockHalf} onPress={this.readMoreTomorrow.bind(this, 3)}>
                         <View style={styles.nameWrap}>
-                            <Text style={styles.name}>{tomorrow.content[3].name}</Text>
+                            <Text allowFontScaling={false} style={styles.name}>{tomorrow.content[3].name}</Text>
                         </View>
                         <View style={styles.txtWrap}>
-                            <Text style={styles.descText}>{tomorrow.content[3].desc}</Text>
+                            <Text allowFontScaling={false} style={styles.descText}>{tomorrow.content[3].desc}</Text>
                         </View>
-                        <Text style={styles.moreButton}>Read More!</Text>
+                        <Text allowFontScaling={false} style={styles.moreButton}>Read More!</Text>
                     </TouchableOpacity>
                     <TouchableOpacity style={styles.fortuneBlockHalf} onPress={this.readMoreTomorrow.bind(this, 4)}>
                         <View style={styles.nameWrap}>
-                            <Text style={styles.name}>{tomorrow.content[4].name}</Text>
+                            <Text allowFontScaling={false} style={styles.name}>{tomorrow.content[4].name}</Text>
                         </View>
                         <View style={styles.txtWrap}>
-                            <Text style={styles.descText}>{tomorrow.content[4].desc}</Text>
+                            <Text allowFontScaling={false} style={styles.descText}>{tomorrow.content[4].desc}</Text>
                         </View>
-                        <Text style={styles.moreButton}>Read More!</Text>
+                        <Text allowFontScaling={false} style={styles.moreButton}>Read More!</Text>
                     </TouchableOpacity>
                 </View>
                 <Modal
                     isVisible={modalVisible2}
-                    style={{alignItems: 'center',}}
+                    style={{alignItems: 'center',justifyContent: 'center'}}
                     onBackdropPress={() => this.setState({ modalVisible: false })}
                     // onSwipe={() => this.setState({ modalVisible: false })}
                     onBackButtonPress={() => this.setState({ modalVisible: false })}
                 >
+                    <ScrollView>
                     {readMoreBlock2 !== -1 ? <View style={styles.modalStyle}>
                         <View style={styles.nameWrap}>
-                            <Text style={styles.name}>{tomorrow.content[readMoreBlock2].name}</Text>
+                            <Text allowFontScaling={false} style={styles.name}>{tomorrow.content[readMoreBlock2].name}</Text>
                         </View>
                         <View style={styles.txtWrap}>
-                            <Text style={styles.descText}>{tomorrow.content[readMoreBlock2].desc}</Text>
+                            <Text allowFontScaling={false} style={styles.descText}>{tomorrow.content[readMoreBlock2].desc}</Text>
                         </View>
                         <TouchableOpacity
                             onPress={() => {
                             this.setModalVisibleTomorrow(!modalVisible2);
                             }}
                         >
-                            <Text style={styles.modalCloseButton} >Hide Modal</Text>
+                            <Text allowFontScaling={false} style={styles.modalCloseButton} >닫기</Text>
                         </TouchableOpacity>
                     </View> : ''}
+                    </ScrollView>
                 </Modal>                
             </ScrollView>
         )
@@ -268,10 +268,10 @@ export default class Saju extends Component {
             <ScrollView style={styles.scrollBox}>
                 <TouchableOpacity style={styles.fortuneBlockMore}>
                     <View style={styles.nameWrap}>
-                        <Text style={styles.name}>{month.content[0].name}</Text>
+                        <Text allowFontScaling={false} style={styles.name}>{month.content[0].name}</Text>
                     </View>
                     <View style={styles.txtWrap}>
-                        <Text style={styles.descText}>{month.content[0].desc}</Text>
+                        <Text allowFontScaling={false} style={styles.descText}>{month.content[0].desc}</Text>
                     </View>
                 </TouchableOpacity>
             </ScrollView>
@@ -299,18 +299,18 @@ export default class Saju extends Component {
                     </TouchableOpacity>
                 </View>
                 <View style={styles.userInfo}>
-                    <Text style={styles.userInfoTitle}>{userInfoTitle}</Text>
+                    <Text allowFontScaling={false} style={styles.userInfoTitle}>{userInfoTitle}</Text>
                 </View>
                 <SegmentedControlTab
                     tabsContainerStyle={{borderTopLeftRadius:0, marginBottom: wp(3)}}
                     values={['오늘의운세', '내일의운세', '이달의운세']}
                     selectedIndex={selectedIndex}
                     onTabPress={this.changeView}
-                    tabTextStyle={{color:'#fff'}}
+                    tabTextStyle={{color:'#fff', fontSize: 10}}
                     tabStyle={{backgroundColor:'transparent', borderColor:'rgba(255,255,255,0.2)'}}
                     activeTabStyle={{backgroundColor:'rgba(255,255,255,0.2)'}}
                     activeTabTextStyle={{color:'#fff'}}
-                   
+                    allowFontScaling={false}
                 />
                 {selectedIndex === 0 ? dailyView
                 :
@@ -369,7 +369,7 @@ const styles = StyleSheet.create({
         fontSize: hp(2)
     },
     scrollBox: {
-        paddingBottom: wp(2),
+        height: hp(70),
         marginBottom: hp(5)
     },
     fortuneBlock: {

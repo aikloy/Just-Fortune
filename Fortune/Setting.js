@@ -6,21 +6,6 @@ import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-nativ
 import Modal from "react-native-modal";
 // import { throws } from 'assert';
 
-let originalGetDefaultPropsText = Text.defaultProps;
-Text.defaultProps = function() {
-    return {
-        ...originalGetDefaultPropsText,
-        allowFontScaling: false,
-    };
-};
-
-let originalGetDefaultPropsTextInput = TextInput.defaultProps;
-TextInput.defaultProps = function() {
-    return {
-        ...originalGetDefaultPropsTextInput,
-        allowFontScaling: false,
-    };
-};
 
 const timeData = [
     {
@@ -98,7 +83,7 @@ export default class Setting extends Component {
         const timeList = timeData.map((data, i)=> {
             return(
                 <TouchableOpacity key={i} style={styles.timeItemWrap} onPress={()=>this.setState({time: data.value, timeText:data.text, isVisible:false})}>
-                <Text style={styles.timeItem}>{data.text}</Text>
+                <Text allowFontScaling={false} style={styles.timeItem}>{data.text}</Text>
                 </TouchableOpacity>
             )
         })
@@ -127,14 +112,15 @@ export default class Setting extends Component {
                             values={['양력', '음력', '윤달']}
                             selectedIndex={this.state.selectedIndex}
                             onTabPress={this.changeSolar}
-                            tabTextStyle={{color:'#fff'}}
+                            tabTextStyle={{color:'#fff', fontSize:12}}
                             tabStyle={{backgroundColor:'transparent', borderColor:'rgba(255,255,255,0.2)'}}
                             activeTabStyle={{backgroundColor:'rgba(255,255,255,0.2)'}}
                             activeTabTextStyle={{color:'#fff'}}
+                            allowFontScaling={false}
                         />
                         <View style={styles.birth}>
-                            <Text style={styles.text}>생년월일  </Text>
-                            <TextInput 
+                            <Text allowFontScaling={false} style={styles.text}>생년월일  </Text>
+                            <TextInput  allowFontScaling={false} 
                                 onChangeText={(birth) => this.setState({birth: birth})}
                                 value={this.state.birth}
                                 keyboardType={'number-pad'}
@@ -146,9 +132,9 @@ export default class Setting extends Component {
                             />
                         </View>
                         <View style={styles.birth}>
-                            <Text style={styles.text}>생시  </Text>
+                            <Text allowFontScaling={false} style={styles.text}>생시  </Text>
                             <TouchableOpacity onPress={()=>this.toggleModal(true)} style= {{width:'70%', height: wp(8), backgroundColor:'rgba(255,255,255,0.5)'}}>
-                                <Text style= {{textAlign:'center', color:'#fff', height: wp(8), lineHeight: wp(10)}}>
+                                <Text allowFontScaling={false} style= {{textAlign:'center', color:'#fff', height: wp(8), lineHeight: wp(8)}}>
                                     {this.state.timeText}
                                 </Text>
                             </TouchableOpacity>
@@ -163,7 +149,7 @@ export default class Setting extends Component {
                             <View style={styles.modalStyle}>
                                {timeList}
                             </View>
-                        </Modal>
+                        </Modal>   
                     </View>
                 </TouchableWithoutFeedback>
                 <TouchableWithoutFeedback style={{marginBottom:hp(30),}} onPress={this.saveInfo}>
@@ -234,7 +220,8 @@ const styles = StyleSheet.create({
     },
     text: {
         color: '#fff',
-        flex: 1
+        flex: 1,
+        fontSize: hp(2)
     },
     picker: {
         // position: 'absolute',
